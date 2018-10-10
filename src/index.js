@@ -1,13 +1,26 @@
+#!/usr/bin/env node
+
+import app from 'commander';
 import Duck from './lib/Duck';
 
-export default function app() {
+export default function runMain() {
+  app
+    .version('0.0.1')
+    .option('-u, --uri [uri]', 'Mongo URI to use', 'mongodb://localhost/test')
+    .option(
+      '-i, --update-interval [mSecs]',
+      'The update interval, to retrieve jobs, in ms',
+      600000
+    )
+    .parse(process.argv);
+
   const duck = new Duck({
-    url: 'mongodb://localhost/test',
-    refreshInterval: 600000
+    url: app.uri,
+    refreshInterval: app.updateInterval
   });
   duck.start();
 }
 
 if (require.main === module) {
-  app();
+  runMain();
 }
