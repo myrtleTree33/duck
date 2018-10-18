@@ -14,8 +14,11 @@ export default function runMain() {
     )
     .parse(process.argv);
 
+  console.log(app.uri);
+  console.log(app.updateInterval);
+
   const duck = new Duck({
-    url: app.uri,
+    uri: app.uri,
     refreshInterval: app.updateInterval
   });
   duck.start();
