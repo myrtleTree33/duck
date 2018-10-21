@@ -28,7 +28,7 @@ export default class Duck {
               rootUrl: url,
               priority
             });
-            cacheItem.save().then(e => {}); // ignore errors
+            await cacheItem.save(); // ignore errors
             console.log(`Inserted ${url}`);
           });
         });
