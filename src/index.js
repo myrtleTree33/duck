@@ -14,8 +14,8 @@ export default function runMain() {
     )
     .parse(process.argv);
 
-  console.log(app.uri);
-  console.log(app.updateInterval);
+  console.log(`Launching for Mongo URI=${app.uri}`);
+  console.log(`Updating with cron every interval=${app.updateInterval}ms`);
 
   const duck = new Duck({
     uri: app.uri,
