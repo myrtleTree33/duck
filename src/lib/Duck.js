@@ -33,7 +33,9 @@ export default class Duck {
           });
         });
       } catch (e) {
+        console.error('--- Caught error ---')
         console.error(e);
+        console.error('--------------------');
       }
     })();
   }
