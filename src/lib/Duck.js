@@ -28,12 +28,15 @@ export default class Duck {
               rootUrl: url,
               priority
             });
-            await cacheItem.save(); // ignore errors
+            cacheItem
+              .save()
+              .then()
+              .catch(e => e); // ignore errors
             console.log(`Inserted ${url}`);
           });
         });
       } catch (e) {
-        console.error('--- Caught error ---')
+        console.error('--- Caught error ---');
         console.error(e);
         console.error('--------------------');
       }
