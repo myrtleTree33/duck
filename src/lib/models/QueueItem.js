@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+
 const { Schema } = mongoose;
 
-const cacheItemSchema = new Schema({
+const queueItemSchema = new Schema({
   url: {
     type: String,
     unique: true,
@@ -15,4 +16,4 @@ const cacheItemSchema = new Schema({
   dateAdded: { type: Date, default: Date.now }
 });
 
-export default mongoose.model('CacheItem', cacheItemSchema);
+export default mongoose.model('QueueItem', queueItemSchema);

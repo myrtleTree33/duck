@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import cron from 'node-cron';
 
-import CacheItem from './models/CacheItem';
+import QueueItem from './models/QueueItem';
 import QueuedUrl from './models/QueuedUrl';
 
 export default class Duck {
@@ -23,12 +23,12 @@ export default class Duck {
             this.tasks[id].destroy();
           }
           this.tasks[id] = cron.schedule(interval, () => {
-            const cacheItem = new CacheItem({
+            const queueItem = new QueueItem({
               url,
               rootUrl: url,
               priority
             });
-            cacheItem
+            queueItem
               .save()
               .then()
               .catch(e => e); // ignore errors
