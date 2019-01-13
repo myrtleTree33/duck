@@ -45,7 +45,6 @@ export default class Duck {
               { url, rootUrl: url, priority },
               { upsert: true, new: true }
             )
-              .exec()
               .then(() =>
                 console.log(
                   `Inserted url=${url} at date=${new Date().toLocaleString()}`
