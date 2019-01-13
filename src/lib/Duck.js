@@ -30,16 +30,16 @@ export default class Duck {
           } tasks to insert at ${new Date().toLocaleString()}`
         );
         queuedUrls.forEach(queuedUrl => {
-          const { id, url, priority, interval } = queuedUrl;
+          const { url, priority, interval } = queuedUrl;
           const { tasks } = this;
 
           // if task is found, unschedule task
-          if (tasks[id]) {
-            tasks[id].destroy();
-            console.log(`Destroyed task[${id}] for url=${url}`);
+          if (tasks[url]) {
+            tasks[url].destroy();
+            console.log(`Destroyed task[${url}]`);
           }
 
-          tasks[id] = cron.schedule(interval, () => {
+          tasks[url] = cron.schedule(interval, () => {
             QueueItem.findOneAndUpdate(
               { url },
               { url, rootUrl: url, priority },
@@ -47,7 +47,9 @@ export default class Duck {
             )
               .exec()
               .then(() =>
-                console.log(`Inserted ${url} at ${new Date().toLocaleString()}`)
+                console.log(
+                  `Inserted url=${url} at date=${new Date().toLocaleString()}`
+                )
               )
               .catch(e => console.error(e));
           });
@@ -63,6 +65,5 @@ export default class Duck {
     setInterval(() => {
       this.refresh();
     }, this.refreshInterval);
-    // }, 1000);
   }
 }
