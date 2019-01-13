@@ -5,12 +5,15 @@ import QueueItem from './models/QueueItem';
 import QueuedUrl from './models/QueuedUrl';
 
 export default class Duck {
-  constructor({ uri = 'mongodb://localhost/test', refreshInterval = 60000 }) {
+  constructor({
+    uri = 'mongodb://localhost/newsfeed',
+    refreshInterval = 60000 // 10 minutes
+  }) {
     this.mongoose = mongoose.connect(uri);
     this.tasks = {};
     this.refreshInterval = refreshInterval;
     // const item = new QueuedUrl({
-    //   url: 'www.lego.com',
+    //   url: 'https://www.channelnewsasia.com/',
     //   priority: 1,
     //   interval: '0 */4 * * *'
     // });
@@ -28,27 +31,29 @@ export default class Duck {
         );
         queuedUrls.forEach(queuedUrl => {
           const { id, url, priority, interval } = queuedUrl;
-          // unschedule task if task is not found
-          if (this.tasks[id]) {
-            this.tasks[id].destroy();
+          const { tasks } = this;
+
+          // if task is found, unschedule task
+          if (tasks[id]) {
+            tasks[id].destroy();
+            console.log(`Destroyed task[${id}] for url=${url}`);
           }
-          this.tasks[id] = cron.schedule(interval, () => {
-            const queueItem = new QueueItem({
-              url,
-              rootUrl: url,
-              priority
-            });
-            queueItem
-              .save()
-              .then()
-              .catch(e => e); // ignore errors
-            console.log(`Inserted ${url} at ${new Date().toLocaleString()}`);
+
+          tasks[id] = cron.schedule(interval, () => {
+            QueueItem.findOneAndUpdate(
+              { url },
+              { url, rootUrl: url, priority },
+              { upsert: true, new: true }
+            )
+              .exec()
+              .then(() =>
+                console.log(`Inserted ${url} at ${new Date().toLocaleString()}`)
+              )
+              .catch(e => console.error(e));
           });
         });
       } catch (e) {
-        console.error('--- Caught error ---');
         console.error(e);
-        console.error('--------------------');
       }
     })();
   }
@@ -57,6 +62,7 @@ export default class Duck {
     this.refresh();
     setInterval(() => {
       this.refresh();
-    }, this.refreshInterval); // 10 minutes
+    }, this.refreshInterval);
+    // }, 1000);
   }
 }

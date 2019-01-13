@@ -6,7 +6,11 @@ import Duck from './lib/Duck';
 export default function runMain() {
   app
     .version('0.0.1')
-    .option('-u, --uri [uri]', 'Mongo URI to use', 'mongodb://localhost/test')
+    .option(
+      '-u, --uri [uri]',
+      'Mongo URI to use',
+      'mongodb://localhost/newsfeed'
+    )
     .option(
       '-i, --update-interval [mSecs]',
       'The update interval, to retrieve jobs, in ms',
