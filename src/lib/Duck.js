@@ -30,7 +30,7 @@ export default class Duck {
           } tasks to insert at ${new Date().toLocaleString()}`
         );
         queuedUrls.forEach(queuedUrl => {
-          const { url, priority, interval } = queuedUrl;
+          const { url, priority, interval, depth, maxRandDelayMs } = queuedUrl;
           const { tasks } = this;
 
           // if task is found, unschedule task
@@ -42,7 +42,7 @@ export default class Duck {
           tasks[url] = cron.schedule(interval, () => {
             QueueItem.findOneAndUpdate(
               { url },
-              { url, rootUrl: url, priority },
+              { url, rootUrl: url, priority, depth, maxRandDelayMs },
               { upsert: true, new: true }
             )
               .then(() =>

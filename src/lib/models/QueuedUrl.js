@@ -12,6 +12,14 @@ const queuedUrlSchema = new Schema({
     type: String,
     required: true
   },
+  depth: {
+    type: Number,
+    required: true
+  },
+  maxRandDelayMs: {
+    type: Number,
+    required: true
+  },
   dateAdded: { type: Date, default: Date.now }
 });
 
